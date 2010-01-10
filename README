@@ -1,0 +1,6 @@
+Slight reformatting of the pages at http://mitpress.mit.edu/sicp/full-text/book/book.html
+
+wget -r http://mitpress.mit.edu/sicp/full-text/book/book.html
+
+TODO: fix image at Figure 1.1, the tree diagram.  (comes out darkened for some reason)
+TODO: read the damn book!

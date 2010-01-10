@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="BookId">
+     <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+          <dc:title>Structure and Interpretation of Computer Programs</dc:title>
+          <dc:language>en-us</dc:language>
+          <dc:identifier id="BookId" opf:scheme="ISBN">0262011530</dc:identifier>
+          <dc:creator>Abelson and Sussman</dc:creator>
+          <dc:description>Structure and Interpretation of Computer Programs, 2nd edition</dc:description>
+          <dc:subject>Electronic Digital Computers -- Programming</dc:subject>
+          <dc:publisher>The MIT Press</dc:publisher>
+          <dc:date>2010-01-09</dc:date>
+          <x-metadata>
+               <output encoding="utf-8" content-type="text/x-oeb1-document"></output>
+               <EmbeddedCover>cover.jpg</EmbeddedCover>
+          </x-metadata>
+     </metadata>
+     <manifest>
+                    <item id='item1' media-type='application/xhtml+xml' href='book-Z-H-1.html'></item>
+          <item id='item2' media-type='application/xhtml+xml' href='book-Z-H-2.html'></item>
+          <item id='item3' media-type='application/xhtml+xml' href='book-Z-H-3.html'></item>
+          <item id='item4' media-type='application/xhtml+xml' href='book-Z-H-4.html'></item>
+          <item id='item5' media-type='application/xhtml+xml' href='book-Z-H-5.html'></item>
+          <item id='item6' media-type='application/xhtml+xml' href='book-Z-H-6.html'></item>
+          <item id='item7' media-type='application/xhtml+xml' href='book-Z-H-7.html'></item>
+          <item id='item8' media-type='application/xhtml+xml' href='book-Z-H-8.html'></item>
+          <item id='item9' media-type='application/xhtml+xml' href='book-Z-H-9.html'></item>
+          <item id='item10' media-type='application/xhtml+xml' href='book-Z-H-10.html'></item>
+          <item id='item11' media-type='application/xhtml+xml' href='book-Z-H-11.html'></item>
+          <item id='item12' media-type='application/xhtml+xml' href='book-Z-H-12.html'></item>
+          <item id='item13' media-type='application/xhtml+xml' href='book-Z-H-13.html'></item>
+          <item id='item14' media-type='application/xhtml+xml' href='book-Z-H-14.html'></item>
+          <item id='item15' media-type='application/xhtml+xml' href='book-Z-H-15.html'></item>
+          <item id='item16' media-type='application/xhtml+xml' href='book-Z-H-16.html'></item>
+          <item id='item17' media-type='application/xhtml+xml' href='book-Z-H-17.html'></item>
+          <item id='item18' media-type='application/xhtml+xml' href='book-Z-H-18.html'></item>
+          <item id='item19' media-type='application/xhtml+xml' href='book-Z-H-19.html'></item>
+          <item id='item20' media-type='application/xhtml+xml' href='book-Z-H-20.html'></item>
+          <item id='item21' media-type='application/xhtml+xml' href='book-Z-H-21.html'></item>
+          <item id='item22' media-type='application/xhtml+xml' href='book-Z-H-22.html'></item>
+          <item id='item23' media-type='application/xhtml+xml' href='book-Z-H-23.html'></item>
+          <item id='item24' media-type='application/xhtml+xml' href='book-Z-H-24.html'></item>
+          <item id='item25' media-type='application/xhtml+xml' href='book-Z-H-25.html'></item>
+          <item id='item26' media-type='application/xhtml+xml' href='book-Z-H-26.html'></item>
+          <item id='item27' media-type='application/xhtml+xml' href='book-Z-H-27.html'></item>
+          <item id='item28' media-type='application/xhtml+xml' href='book-Z-H-28.html'></item>
+          <item id='item29' media-type='application/xhtml+xml' href='book-Z-H-29.html'></item>
+          <item id='item30' media-type='application/xhtml+xml' href='book-Z-H-30.html'></item>
+          <item id='item31' media-type='application/xhtml+xml' href='book-Z-H-31.html'></item>
+          <item id='item32' media-type='application/xhtml+xml' href='book-Z-H-32.html'></item>
+          <item id='item33' media-type='application/xhtml+xml' href='book-Z-H-33.html'></item>
+          <item id='item34' media-type='application/xhtml+xml' href='book-Z-H-34.html'></item>
+          <item id='item35' media-type='application/xhtml+xml' href='book-Z-H-35.html'></item>
+          <item id='item36' media-type='application/xhtml+xml' href='book-Z-H-36.html'></item>
+          <item id='item37' media-type='application/xhtml+xml' href='book-Z-H-37.html'></item>
+          <item id='item38' media-type='application/xhtml+xml' href='book-Z-H-38.html'></item>
+          <item id="ncx" media-type="application/x-dtbncx+xml" href="toc.ncx"></item>
+     </manifest>
+     <spine toc="ncx">
+                    <itemref idref='item1'/>
+          <itemref idref='item2'/>
+          <itemref idref='item3'/>
+          <itemref idref='item4'/>
+          <itemref idref='item5'/>
+          <itemref idref='item6'/>
+          <itemref idref='item7'/>
+          <itemref idref='item8'/>
+          <itemref idref='item9'/>
+          <itemref idref='item10'/>
+          <itemref idref='item11'/>
+          <itemref idref='item12'/>
+          <itemref idref='item13'/>
+          <itemref idref='item14'/>
+          <itemref idref='item15'/>
+          <itemref idref='item16'/>
+          <itemref idref='item17'/>
+          <itemref idref='item18'/>
+          <itemref idref='item19'/>
+          <itemref idref='item20'/>
+          <itemref idref='item21'/>
+          <itemref idref='item22'/>
+          <itemref idref='item23'/>
+          <itemref idref='item24'/>
+          <itemref idref='item25'/>
+          <itemref idref='item26'/>
+          <itemref idref='item27'/>
+          <itemref idref='item28'/>
+          <itemref idref='item29'/>
+          <itemref idref='item30'/>
+          <itemref idref='item31'/>
+          <itemref idref='item32'/>
+          <itemref idref='item33'/>
+          <itemref idref='item34'/>
+          <itemref idref='item35'/>
+          <itemref idref='item36'/>
+          <itemref idref='item37'/>
+          <itemref idref='item38'/>
+     </spine>
+     <tours></tours>
+     <guide>
+         <reference type="toc" title="Table of Contents" href="book-Z-H-4.html%23chap_Temp_1"></reference>
+         <reference type="start" title="Startup Page" href="book-Z-H-9.html%23start"></reference>
+     </guide>
+</package>  
+    
