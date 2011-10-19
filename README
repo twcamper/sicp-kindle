@@ -18,5 +18,4 @@ Slight reformatting of the pages at http://mitpress.mit.edu/sicp/full-text/book/
 7 - built opf and ncx with ruby.  toc.ncx allows 'nav points' for the 5-way kindle knob to get you from chapter to chapter
 
 
-TODO: fix image at Figure 1.1, the tree diagram.  (comes out darkened for some reason)
 TODO: read the damn book!
