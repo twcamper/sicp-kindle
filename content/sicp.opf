@@ -8,7 +8,7 @@
           <dc:description>Structure and Interpretation of Computer Programs, 2nd edition</dc:description>
           <dc:subject>Electronic Digital Computers -- Programming</dc:subject>
           <dc:publisher>The MIT Press</dc:publisher>
-          <dc:date>2010-01-10</dc:date>
+          <dc:date>2011-09-11</dc:date>
           <x-metadata>
                <output encoding="utf-8" content-type="text/x-oeb1-document"></output>
                <EmbeddedCover>cover.jpg</EmbeddedCover>
@@ -100,5 +100,5 @@
          <reference type="toc" title="Table of Contents" href="book-Z-H-4.html%23chap_Temp_1"></reference>
          <reference type="start" title="Startup Page" href="book-Z-H-9.html%23start"></reference>
      </guide>
-</package>  
+</package>
     
