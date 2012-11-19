@@ -9,13 +9,8 @@ Slight reformatting of the pages at http://mitpress.mit.edu/sicp/full-text/book/
 
 3 - removed cover page 'book.html' since there's already a cover image
 
-4 - set text-indent: 0 for <p> tags, since kindle indents about 1em by default, which deformatted the code snips (<p><tt> is used instead of <pre>)
+4 - set height="2em" on div tags in 'References' section (kindle doesn't support the CSS for controlling this)
 
-5 - set height="2em" on div tags in 'References' section (kindle doesn't support the CSS for controlling this)
+5- added jump table to top of index
 
-6 - added jump table to top of index
-
-7 - built opf and ncx with ruby.  toc.ncx allows 'nav points' for the 5-way kindle knob to get you from chapter to chapter
-
-
-TODO: read the damn book!
+6 - built opf and ncx with ruby.  toc.ncx allows 'nav points' for the 5-way kindle knob to get you from chapter to chapter
