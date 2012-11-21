@@ -123,6 +123,6 @@ if __FILE__ == $0
   File.open($NCX_TOC, "w")    {|f| f.puts bb.ncx_toc} if ARGV.include?("toc")
   File.open($OPF, "w")        {|f| f.puts bb.opf}     if ARGV.include?("opf")
   
-  system("/Applications/KindleGen/kindlegen #{$OPF} -c1 -verbose -o #{$OUTPUT} > #{$LOG}") if ARGV.include?("build")
+  system("#{$KINDLE_GEN} #{$OPF} -c1 -verbose -o #{$OUTPUT} > #{$LOG}") if ARGV.include?("build")
   system("mv #{$LOCAL_ROOT}/#{$OUTPUT} #{$LOCAL_ROOT}/..")
 end
