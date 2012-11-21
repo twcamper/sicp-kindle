@@ -2,7 +2,7 @@ require 'rubygems'
 require 'hpricot'
 
 $LOCAL_ROOT = "../content"
-#$LOCAL_ROOT = "../book/mit_contents"
+$OUTPUT = "sicp.mobi"
 
 $TOC        = "book-Z-H-4.html"
 $NCX_TOC    = "toc.ncx"
