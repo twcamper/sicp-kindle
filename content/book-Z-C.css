@@ -1,5 +1,3 @@
-
-
 body {
    color: black;
 /*   background-color: #e5e5e5; */
@@ -75,5 +73,5 @@ background-color: pink;
 color: gray;
 }
 
-p { text-indent: 0}
-p.indent { text-indent: 1em}
+p { text-indent: 1.5em; margin: 0; padding: 0 }
+
