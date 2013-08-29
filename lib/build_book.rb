@@ -1,5 +1,4 @@
-#!/usr/bin/ruby
-require 'properties'
+require_relative 'properties'
 require 'date'
 
 module Fix
