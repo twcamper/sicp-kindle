@@ -115,11 +115,18 @@ class BookBuilder
   end
 end
 
+
 if __FILE__ == $0
 
   Dir.chdir($LOCAL_ROOT)
  # Fix.do
-
+  if ARGV.include?("-h") or ARGV.include?("--help") or ARGV.include?("help")
+	  puts "Usage: build_book.rb [build] [toc] [opf]"
+	  puts "  build - Build the book"
+	  puts "  toc - Generate table of contents"
+	  puts "  opf - Generate OPF metadata file"
+	  exit
+  end
   bb = BookBuilder.new
   
   File.open($NCX_TOC, "w")    {|f| f.puts bb.ncx_toc} if ARGV.include?("toc")
