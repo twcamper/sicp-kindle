@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 require 'properties'
 require 'date'
 
