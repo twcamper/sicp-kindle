@@ -124,5 +124,5 @@ if __FILE__ == $0
   File.open($NCX_TOC, "w")    {|f| f.puts bb.ncx_toc} if ARGV.include?("toc")
   File.open($OPF, "w")        {|f| f.puts bb.opf}     if ARGV.include?("opf")
   
-  system("~/mobigen/kindlegen #{$OPF} -c1 -rebuild -verbose > #{$LOG}") if ARGV.include?("build")
+  system("kindlegen #{$OPF} -c1 -rebuild -verbose > #{$LOG}") if ARGV.include?("build")
 end
