@@ -1,15 +1,20 @@
-### Slight reformatting of the pages at http://mitpress.mit.edu/sicp/full-text/book/book.html
+#### Slight reformatting of the pages at
+
+    http://mitpress.mit.edu/sicp/full-text/book/book.html
 
 1 - I got the source:
+
+<pre>
       wget -r http://mitpress.mit.edu/sicp/full-text/book/book.html
+</pre>
 
 2 - used ~~hpricot~~ Nokogiri to:
-      - remove 'navigation' divs
-      - insert <mbp:pagebreak /> tags at the top of each html body ( this keeps lines from getting split )
+      * remove 'navigation' divs
+      * insert <code><mbp:pagebreak /></code> tags at the top of each html body to keep lines from getting split at page-breaks
 
 3 - removed cover page 'book.html' since there's already a cover image
 
-4 - set text-indent: 0 for <p> tags, since kindle indents about 1em by default, which deformatted the code snips (<p><tt> is used instead of <pre>)
+4 - set text-indent: 0 for <code><p></code> tags, since kindle indents about 1em by default, which deformatted the code snips (<code><p><tt></code> is used instead of <code><pre></code>)
 
 5 - set height="2em" on div tags in 'References' section (kindle doesn't support the CSS for controlling this)
 
@@ -26,8 +31,11 @@ The old build of <code>sicp.mobi</code> in this repo seems to work fine.  But if
 * install 'kindlegen' somewhere in your path.
 * make sure you have Ruby 1.8.7 or later
 * run one of the following (i.e., working dir does not matter):
-** ~/sicp-kindle/lib$ ./build_book.rb opf build
-** ~/sicp-kindle$ ./lib/build_book.rb opf build
+
+<pre>
+    ~/sicp-kindle/lib$ ./build_book.rb opf build
+    ~/sicp-kindle$ ./lib/build_book.rb opf build
+</pre>
 
 The <code>opf</code> option generates the input xml, with the current date in the metadata.  The <code>build</code> option runs kindlegen to output the <code>mobi</code> file.
 
