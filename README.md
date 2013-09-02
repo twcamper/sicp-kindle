@@ -10,8 +10,8 @@ http://mitpress.mit.edu/sicp/full-text/book/book.html
 
 2 - used ~~hpricot~~ Nokogiri to:
 
-      * remove 'navigation' divs
-      * insert <code>&lt;mbp:pagebreak /&gt;</code> tags at the top of each html body to keep lines from getting split at page-breaks
+* remove 'navigation' divs
+* insert <code>&lt;mbp:pagebreak /&gt;</code> tags at the top of each html body to keep lines from getting split at page-breaks
 
 3 - removed cover page 'book.html' since there's already a cover image
 
