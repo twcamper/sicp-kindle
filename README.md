@@ -1,6 +1,6 @@
 #### Slight reformatting of the pages at
 
-    http://mitpress.mit.edu/sicp/full-text/book/book.html
+http://mitpress.mit.edu/sicp/full-text/book/book.html
 
 1 - I got the source:
 
@@ -9,12 +9,13 @@
 </pre>
 
 2 - used ~~hpricot~~ Nokogiri to:
+
       * remove 'navigation' divs
-      * insert <code><mbp:pagebreak /></code> tags at the top of each html body to keep lines from getting split at page-breaks
+      * insert <code>&lt;mbp:pagebreak /&gt;</code> tags at the top of each html body to keep lines from getting split at page-breaks
 
 3 - removed cover page 'book.html' since there's already a cover image
 
-4 - set text-indent: 0 for <code><p></code> tags, since kindle indents about 1em by default, which deformatted the code snips (<code><p><tt></code> is used instead of <code><pre></code>)
+4 - set text-indent: 0 for <code>p</code> tags, since kindle indents about 1em by default, which deformatted the code snips ( <code>&lt;p&gt;&lt;tt&gt;</code> is used instead of <code>pre</code> )
 
 5 - set height="2em" on div tags in 'References' section (kindle doesn't support the CSS for controlling this)
 
