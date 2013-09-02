@@ -1,17 +1,27 @@
 #!/usr/bin/env ruby
-require_relative 'properties'
+
+require 'rubygems'
 require 'date'
 
-module Fix
+# Only works/needed with pristine HTML source from the MIT website.
+module FixHTMLSource
 
   def self.chapters
     @chapters ||= BookBuilder.new.chapters
   end
 
+  # remove unneeded navigation elements,
+  # add mobi-specific pagebreaks
   def self.do
+    require 'nokogiri'
     chapters.reject {|f| f == "book-Z-H-4.html"}.each do |file|
-      doc = Hpricot(File.open(file).read)
+      doc = Nokogiri(File.open(file).read)
+
       n = doc.search(".navigation")
+      #
+      # This will FAIL on the source in the repo
+      # because the 'navigation' elements are already removed!!
+      #
       n.first.before( "<mbp:pagebreak />")
       n.remove
       File.open(file, "w") {|f| f.puts doc}
@@ -80,8 +90,8 @@ class BookBuilder
     manifest_items.size.times { |i| lines << "          <itemref idref='item#{i + 1}'/>"}
     return lines
   end
-  
-  def opf
+
+  def opf(toc_html)
     %Q{<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="BookId">
      <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
@@ -107,10 +117,10 @@ class BookBuilder
      </spine>
      <tours></tours>
      <guide>
-         <reference type="toc" title="Table of Contents" href="#{$TOC}%23chap_Temp_1"></reference>
+         <reference type="toc" title="Table of Contents" href="#{toc_html}%23chap_Temp_1"></reference>
          <reference type="start" title="Startup Page" href="book-Z-H-9.html%23start"></reference>
      </guide>
-</package>  
+</package>
     }
   end
 end
@@ -118,31 +128,60 @@ end
 
 if __FILE__ == $0
 
-  Dir.chdir($LOCAL_ROOT)
- # Fix.do
-  if ARGV.include?("-h") or ARGV.include?("--help") or ARGV.include?("help")
-	  puts "Usage: build_book.rb [build] [toc] [opf]"
+  if ARGV.empty? or
+     ARGV.include?("-h") or
+     ARGV.include?("--help") or
+     ARGV.include?("help")
+	  puts "Usage: build_book.rb [build] [toc] [opf] [fix]"
 	  puts "  build - Build the book"
-	  puts "  toc - Generate table of contents"
-	  puts "  opf - Generate OPF metadata file"
-	  exit
+	  puts "  toc - Generate table of contents if toc.ncx is missing"
+	  puts "  opf - Generate OPF metadata file to update publication date"
+	  puts "  fix - fix html source -- not necessary with the source in this repo"
+	  exit 1
   end
+
+  # ########################################################################
+  # Local Input/Output file names
+  # ########################################################################
+  PROJECT    = File.expand_path(File.dirname(__FILE__) + "/..")
+  CONTENT    = "#{PROJECT}/content"
+  TOC_HTML   = "book-Z-H-4.html"
+  NCX_TOC    = "toc.ncx"
+  OPF        = "sicp.opf"
+  LOG        = "mobi.out.txt"
+
+  puts "entering dir: #{CONTENT}"
+  Dir.chdir(CONTENT)
+
   bb = BookBuilder.new
-  
-  File.open($NCX_TOC, "w")    {|f| f.puts bb.ncx_toc} if ARGV.include?("toc")
-  File.open($OPF, "w")        {|f| f.puts bb.opf}     if ARGV.include?("opf")
+
+  File.open(NCX_TOC, "w")    {|f| f.puts bb.ncx_toc}       if ARGV.include?("toc")
+  File.open(OPF, "w")        {|f| f.puts bb.opf(TOC_HTML)} if ARGV.include?("opf")
+  # ################################################################################
+  # Only run 'FixHTMLSource.do' if you're working with pristine HTML source from MIT
+  # The source in ../content is already 'fixed' so the 'do()' method will fail.
+  # ################################################################################
+  FixHTMLSource.do                                         if ARGV.include?("fix")
 
   if ARGV.include?("build")
-	  `kindlegen #{$OPF} -c1 -verbose > #{$LOG}`
+    # kindlegen executable must be on your path
+    cmd = "kindlegen #{OPF} -c2 -verbose > #{LOG}"
+    puts "running: '#{cmd}'"
+    puts "\nwriting to: #{CONTENT}/#{OPF.sub('opf', 'mobi')} . . .\n"
+    `#{cmd}`
 	  result = $?
 
-      #kindlegen exitsatus 1 = warning, 0 = success, Others = error
+    # kindlegen exitsatus 1 = warning, 0 = success, Others = error
 	  if result.exitstatus == 1
-		  puts "Warnings when building book, see #{$LOCAL_ROOT}/#{$LOG} for information"
+		  puts "Warnings when building book, see #{CONTENT}/#{LOG} for information"
 	  elsif result.exitstatus == 0
 		  puts "Book built successfully!"
 	  else
-		  puts "Failed to build book, see #{$LOCAL_ROOT}/#{$LOG} for information"
+		  puts "Failed to build book, see #{CONTENT}/#{LOG} for information"
 	  end
+
+    exit result.exitstatus
   end
+
+  exit 0
 end
