@@ -41,20 +41,26 @@ The old build of <code>sicp.mobi</code> in this repo seems to work fine.  But if
 <pre>
      $ cd ~/sicp-kindle
      # to build the book (compact binary)
-     $ rake strip
+     $ rake build
      # or just
      $ rake
 
-     # to just build, without stripping (no Python needed)
-     $ rake build
+     # to just build a large but usable book, without stripping (no Python needed)
+     $ rake build_large
 
      # to clean up the output artifacts
      $ rake clean
 
-     # to see the available tasks
-     $ rake -T
+     # hack/test cycle
+     $ rake clean build
 
-     # if you just want to see what the XML looks like,
+     # learn about Rake itself
+     $ rake -h
+
+     # to see the available tasks and their dependencies
+     $ rake -T && rake -P
+
+     # if you just want to see what the XML looks like without building,
      # generate it like this:
      $ rake artifacts/toc.ncx artifacts/sicp.opf
 </pre>
@@ -63,18 +69,18 @@ When you run Rake (<code>:build</code> or <code>:strip</code> task), you'll see 
 
 <pre>
     mkdir -p artifacts
-    generating artifacts/toc.ncx
-    generating artifacts/sicp.opf
-    running: 'kindlegen artifacts/sicp.opf -c2 -verbose > artifacts/kindlegen.log'
-
-    writing to: artifacts/sicp.mobi . . .
+    generating 'artifacts/toc.ncx'
+    generating 'artifacts/sicp.opf'
+    running 'kindlegen artifacts/sicp.opf -c2 -verbose > artifacts/kindlegen.log'
+        writing to directory 'artifacts'
 </pre>
 
 Then probably this:
 
 <pre>
-    Warnings when building book, see $HOME/sicp-kindle/content/mobi.out.txt for information
-    kindlegen Exit Status: 1
+    kindlegen exit status: 1
+        Success with warnings: see artifacts/kindlegen.log for information
+    mv artifacts/sicp.mobi artifacts/sicp-large.mobi
 </pre>
 
 The warnings refer to unresolved links that seem to have no affect on the formatting or navigability of the book itself.
@@ -83,17 +89,14 @@ To deflate the output size by stripping out the input source that Amazon must ha
 
 
 <pre>
-    ./kindlestrip/kindlestrip.py artifacts/sicp.mobi artifacts/sicp-stripped.mobi
-
+    running 'kindlestrip/kindlestrip.py artifacts/sicp.mobi artifacts/sicp-stripped.mobi'
     KindleStrip v1.35.0. Written 2010-2012 by Paul Durrant and Kevin Hendricks.
     Found SRCS section number 750, and count 2
        beginning at offset 1082728 and ending at offset 1202268
        done
        Header Bytes: 53524353000000100000002f00000001
-       kindlestrip/kindlestrip.py Exit Status: 0
+       kindlestrip/kindlestrip.py exit status: 0
 
-       mv artifacts/sicp.mobi artifacts/sicp-large.mobi
-       mv artifacts/sicp-stripped.mobi artifacts/sicp.mobi
 </pre>
 
 ### Interested in reformatting?

@@ -34,7 +34,6 @@ NCX_TOC    = "#{ARTIFACTS}/toc.ncx"
 OPF        = "#{ARTIFACTS}/sicp.opf"
 BOOK       = "#{ARTIFACTS}/sicp.mobi"
 LARGE_BOOK = "#{ARTIFACTS}/sicp-large.mobi"
-STRIPPED   = "#{ARTIFACTS}/sicp-stripped.mobi"
 STRIPPER   = "kindlestrip/kindlestrip.py"
 LOG        = "#{ARTIFACTS}/kindlegen.log"
 
@@ -44,56 +43,57 @@ CLEAN.include(FileList["#{ARTIFACTS}/**", ARTIFACTS])
 # Rake method to make the dir if necessary
 directory(ARTIFACTS)
 
-desc "when you just run '$ rake', this runs :strip"
-task :default => :strip
+desc "when you just run '$ rake', '#{BOOK}' runs"
+task :default => :build
 
-desc "DEFAULT TASK: remove source from completed ebook to reduce size by 1/3"
-task :strip => BOOK do
-  puts cmd = "./#{STRIPPER} #{BOOK} #{STRIPPED}"
-  puts
-  puts `#{cmd}`
-
-  puts "#{STRIPPER} Exit Status: #{$?.exitstatus}"
-  puts
-
-  FileUtils.mv(BOOK, LARGE_BOOK, :verbose => true)
-  FileUtils.mv(STRIPPED, BOOK, :verbose => true)
-end
-
-desc "task alias to run #{BOOK} task"
+desc "alias: create '#{BOOK}' with kindlestrip"
 task :build => BOOK
 
-desc "create the ebook with kindlegen"
-file BOOK => OPF do
+desc "alias: create '#{LARGE_BOOK}' with kindlegen"
+task :build_large => LARGE_BOOK
+
+desc "FINAL OUTPUT: remove source from completed ebook to reduce size by 1/3"
+task BOOK => LARGE_BOOK do
+  cmd = "#{STRIPPER} #{LARGE_BOOK} #{BOOK}"
+  puts "running '#{cmd}'"
+  puts `#{cmd}`
+
+  puts "#{STRIPPER} exit status: #{$?.exitstatus}"
+  puts
+end
+
+desc "usable ebook, but bloated with input source"
+file LARGE_BOOK => OPF do
   # kindlegen executable must be on your path
   cmd = "kindlegen #{OPF} -c2 -verbose > #{LOG}"
-  puts "running: '#{cmd}'"
-  puts "\nwriting to: #{BOOK} . . .\n"
+  puts "running '#{cmd}'"
+  puts "\twriting to directory '#{ARTIFACTS}'\n"
   `#{cmd}`
   result = $?
 
-  # kindlegen exitsatus 1 = warning, 0 = success, Others = error
-  if result.exitstatus == 1
-    puts "Warnings when building book, see #{LOG} for information"
-  elsif result.exitstatus == 0
-    puts "Book built successfully!"
+  puts "kindlegen exit status #{result.exitstatus}:"
+  # kindlegen exitstatus 1 = warning, 0 = success, Others = error
+  if result.exitstatus == 0
+    puts "\tBook built successfully!"
+  elsif result.exitstatus == 1
+    puts "\tSuccess with warnings: see #{LOG} for information"
   else
-    puts "Failed to build book, see #{LOG} for information"
+    raise "Failed to build book: see #{LOG} for information"
   end
-  puts "kindlegen Exit Status: #{result.exitstatus}"
+  FileUtils.mv(BOOK, LARGE_BOOK, :verbose => true)
   puts
+end
+
+desc "OPF xml: depends on NCX T.O.C."
+file OPF => NCX_TOC do
+  puts "generating '#{OPF}'"
+  File.open(OPF, "w") {|f| f.puts BookBuilder(SRC).opf}
 end
 
 desc "T.O.C NCX xml: depends on artifacts dir being present"
 file NCX_TOC => ARTIFACTS do
-  puts "generating #{NCX_TOC}"
-  File.open(NCX_TOC, "w")    {|f| f.puts BookBuilder(SRC).ncx_toc}
-end
-
-desc "OPF xml: dependos on NCX T.O.C."
-file OPF => NCX_TOC do
-  puts "generating #{OPF}"
-  File.open(OPF, "w")        {|f| f.puts BookBuilder(SRC).opf}
+  puts "generating '#{NCX_TOC}'"
+  File.open(NCX_TOC, "w") {|f| f.puts BookBuilder(SRC).ncx_toc}
 end
 
 desc "fix HTML if you got new source from MIT"
