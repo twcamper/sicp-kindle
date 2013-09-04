@@ -35,22 +35,32 @@ The old build of <code>sicp.mobi</code> in this repo seems to work fine.  But if
 
 * install 'kindlegen' somewhere in your path.
 * make sure you have Ruby 1.8.7 or later
-* run one of the following (i.e., working dir does not matter):
+* make sure you have the <code>Rake</code> gem
 
 <pre>
-    ~/sicp-kindle/lib$ ./build_book.rb opf build
-    ~/sicp-kindle$ ./lib/build_book.rb opf build
+     $ cd ~/sicp-kindle
+     # to build the book
+     $ rake build
+     # or just
+     $ rake
+
+     # to clean up the output artifacts
+     $ rake clean
+
+     # to see the available tasks
+     $ rake -T
 </pre>
 
-The <code>opf</code> option generates the input xml, with the current date in the metadata.  The <code>build</code> option runs kindlegen to output the <code>mobi</code> file.
-
-You'll see this for a few minutes:
+When you build, You'll see this for a few minutes:
 
 <pre>
-    entering dir: $HOME/sicp-kindle/content
-    running: 'kindlegen sicp.opf -c2 -verbose > mobi.out.txt'
+    mkdir -p artifacts
+    generating artifacts/toc.ncx
+    generating artifacts/sicp.opf
+    running: 'kindlegen artifacts/sicp.opf -c2 -verbose >
+    artifacts/kindlegen.log'
 
-    writing to: $HOME/sicp-kindle/content/sicp.mobi . . .
+    writing to: artifacts/sicp.mobi . . .
 </pre>
 
 Then probably this:

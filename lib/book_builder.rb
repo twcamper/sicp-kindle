@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # This is free and unencumbered software released into the public domain.
 
 # Anyone is free to copy, modify, publish, use, compile, sell, or
@@ -27,40 +26,18 @@
 require 'rubygems'
 require 'date'
 
-# Only works/needed with pristine HTML source from the MIT website.
-module FixHTMLSource
-
-  def self.chapters
-    @chapters ||= BookBuilder.new.chapters
-  end
-
-  # remove unneeded navigation elements,
-  # add mobi-specific pagebreaks
-  def self.do
-    require 'nokogiri'
-    chapters.reject {|f| f == "book-Z-H-4.html"}.each do |file|
-      doc = Nokogiri(File.open(file).read)
-
-      n = doc.search(".navigation")
-      #
-      # This will FAIL on the source in the repo
-      # because the 'navigation' elements are already removed!!
-      #
-      n.first.before( "<mbp:pagebreak />")
-      n.remove
-      File.open(file, "w") {|f| f.puts doc}
-    end
-  end
+# Singleton to not re-init in rake tasks
+def BookBuilder(source_directory)
+  @bb ||= BookBuilder.new source_directory
 end
 
 class BookBuilder
-  def chapters
-    @chapters ||= get_chapters
+  def initialize(source_directory)
+    @src_dir = source_directory
   end
 
-  def get_chapters
-    files = Dir["book-Z-H*.html"].sort_by {|name| name[/\d+/].to_i}
-    files.collect { |f| f.split(/\//).last }
+  def chapters
+    Dir["#{@src_dir}/book-Z-H*.html"].sort_by {|name| name[/\d+/].to_i}
   end
 
   def navigation_points
@@ -80,12 +57,12 @@ class BookBuilder
 
       lines << "    <navPoint id='navPoint-#{number}' playOrder='#{number}'>"
       lines << "        <navLabel><text>#{label}</text></navLabel>"
-      lines << "        <content src='book-Z-H-#{chapter[0]}.html'/>"
+      lines << "        <content src='#{@src_dir}/book-Z-H-#{chapter[0]}.html'/>"
       lines << "    </navPoint>"
     end
     return lines
   end
-  
+
   def ncx_toc
     %Q{<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN" "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
@@ -100,7 +77,7 @@ class BookBuilder
 </ncx>
     }
   end
-  
+
   def manifest_items
     item_count = 0
     chapters.inject([]) do |lines, chapter|
@@ -108,14 +85,14 @@ class BookBuilder
       lines << "          <item id='item#{item_count}' media-type='application/xhtml+xml' href='#{chapter}'></item>"
     end
   end
-  
+
   def item_refs
     lines = []
     manifest_items.size.times { |i| lines << "          <itemref idref='item#{i + 1}'/>"}
     return lines
   end
 
-  def opf(toc_html)
+  def opf
     %Q{<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="BookId">
      <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
@@ -129,7 +106,7 @@ class BookBuilder
           <dc:date>#{Date.today}</dc:date>
           <x-metadata>
                <output encoding="utf-8" content-type="text/x-oeb1-document"></output>
-               <EmbeddedCover>cover.jpg</EmbeddedCover>
+               <EmbeddedCover>#{@src_dir}/cover.jpg</EmbeddedCover>
           </x-metadata>
      </metadata>
      <manifest>
@@ -141,71 +118,10 @@ class BookBuilder
      </spine>
      <tours></tours>
      <guide>
-         <reference type="toc" title="Table of Contents" href="#{toc_html}%23chap_Temp_1"></reference>
-         <reference type="start" title="Startup Page" href="book-Z-H-9.html%23start"></reference>
+         <reference type="toc" title="Table of Contents" href="#{@src_dir}/book-Z-H-4.html%23chap_Temp_1"></reference>
+         <reference type="start" title="Startup Page" href="#{@src_dir}/book-Z-H-9.html%23start"></reference>
      </guide>
 </package>
     }
   end
-end
-
-
-if __FILE__ == $0
-
-  if ARGV.empty? or
-     ARGV.include?("-h") or
-     ARGV.include?("--help") or
-     ARGV.include?("help")
-	  puts "Usage: build_book.rb [build] [toc] [opf] [fix]"
-	  puts "  build - Build the book"
-	  puts "  toc - Generate table of contents if toc.ncx is missing"
-	  puts "  opf - Generate OPF metadata file to update publication date"
-	  puts "  fix - fix html source -- not necessary with the source in this repo"
-	  exit 1
-  end
-
-  # ########################################################################
-  # Local Input/Output file names
-  # ########################################################################
-  PROJECT    = File.expand_path(File.dirname(__FILE__) + "/..")
-  CONTENT    = "#{PROJECT}/content"
-  TOC_HTML   = "book-Z-H-4.html"
-  NCX_TOC    = "toc.ncx"
-  OPF        = "sicp.opf"
-  LOG        = "mobi.out.txt"
-
-  puts "entering dir: #{CONTENT}"
-  Dir.chdir(CONTENT)
-
-  bb = BookBuilder.new
-
-  File.open(NCX_TOC, "w")    {|f| f.puts bb.ncx_toc}       if ARGV.include?("toc")
-  File.open(OPF, "w")        {|f| f.puts bb.opf(TOC_HTML)} if ARGV.include?("opf")
-  # ################################################################################
-  # Only run 'FixHTMLSource.do' if you're working with pristine HTML source from MIT
-  # The source in ../content is already 'fixed' so the 'do()' method will fail.
-  # ################################################################################
-  FixHTMLSource.do                                         if ARGV.include?("fix")
-
-  if ARGV.include?("build")
-    # kindlegen executable must be on your path
-    cmd = "kindlegen #{OPF} -c2 -verbose > #{LOG}"
-    puts "running: '#{cmd}'"
-    puts "\nwriting to: #{CONTENT}/#{OPF.sub('opf', 'mobi')} . . .\n"
-    `#{cmd}`
-	  result = $?
-
-    # kindlegen exitsatus 1 = warning, 0 = success, Others = error
-	  if result.exitstatus == 1
-		  puts "Warnings when building book, see #{CONTENT}/#{LOG} for information"
-	  elsif result.exitstatus == 0
-		  puts "Book built successfully!"
-	  else
-		  puts "Failed to build book, see #{CONTENT}/#{LOG} for information"
-	  end
-
-    exit result.exitstatus
-  end
-
-  exit 0
 end
