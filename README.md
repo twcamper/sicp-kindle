@@ -49,6 +49,10 @@ The old build of <code>sicp.mobi</code> in this repo seems to work fine.  But if
 
      # to see the available tasks
      $ rake -T
+
+     # if you just want to see what the XML looks like,
+     # generate it like this:
+     $ rake artifacts/toc.ncx artifacts/sicp.opf
 </pre>
 
 When you build, You'll see this for a few minutes:
@@ -57,8 +61,7 @@ When you build, You'll see this for a few minutes:
     mkdir -p artifacts
     generating artifacts/toc.ncx
     generating artifacts/sicp.opf
-    running: 'kindlegen artifacts/sicp.opf -c2 -verbose >
-    artifacts/kindlegen.log'
+    running: 'kindlegen artifacts/sicp.opf -c2 -verbose > artifacts/kindlegen.log'
 
     writing to: artifacts/sicp.mobi . . .
 </pre>
