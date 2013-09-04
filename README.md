@@ -36,13 +36,17 @@ The old build of <code>sicp.mobi</code> in this repo seems to work fine.  But if
 * install 'kindlegen' somewhere in your path.
 * make sure you have Ruby 1.8.7 or later
 * make sure you have the <code>Rake</code> gem
+* ideally, have Python installed
 
 <pre>
      $ cd ~/sicp-kindle
-     # to build the book
-     $ rake build
+     # to build the book (compact binary)
+     $ rake strip
      # or just
      $ rake
+
+     # to just build, without stripping (no Python needed)
+     $ rake build
 
      # to clean up the output artifacts
      $ rake clean
@@ -55,7 +59,7 @@ The old build of <code>sicp.mobi</code> in this repo seems to work fine.  But if
      $ rake artifacts/toc.ncx artifacts/sicp.opf
 </pre>
 
-When you build, You'll see this for a few minutes:
+When you run Rake (<code>:build</code> or <code>:strip</code> task), you'll see this for a few minutes:
 
 <pre>
     mkdir -p artifacts
@@ -70,20 +74,26 @@ Then probably this:
 
 <pre>
     Warnings when building book, see $HOME/sicp-kindle/content/mobi.out.txt for information
+    kindlegen Exit Status: 1
 </pre>
 
 The warnings refer to unresolved links that seem to have no affect on the formatting or navigability of the book itself.  They won't go away until someone debugs the HTML, but there doesn't seem to be any reason to.
 
-#### Stripping the Source
+To deflate the output size by stripping out the input source that Amazon must have some reason for including, yet removes when they publish in their store anyway, the final <code>Rake</code> task <code>:strip</code> uses Paul Durrant's python script from this [GitHub repo](https://github.com/jefftriplett/kindlestrip).  So at the end, you'll see something like:
 
-To deflate the output size by stripping out the <code>opf</code> xml source that Amazon must have some reason for including, yet removes when they publish in their store anyway, use Paul Durrant's python script which can be found on GitHub [here](https://github.com/jefftriplett/kindlestrip).  Note that you only really need the file 'kindlestrip.py' from Jeff Triplett's repo.
-
-e.g.,
 
 <pre>
-    # the third arg to the python script is optional
-    $ ./kindlestrip.py sicp.mobi small.mobi removed-source.log
-    $ mv small.mobi sicp.mobi
+    ./kindlestrip/kindlestrip.py artifacts/sicp.mobi artifacts/sicp-stripped.mobi
+
+    KindleStrip v1.35.0. Written 2010-2012 by Paul Durrant and Kevin Hendricks.
+    Found SRCS section number 750, and count 2
+       beginning at offset 1082728 and ending at offset 1202268
+       done
+       Header Bytes: 53524353000000100000002f00000001
+       kindlestrip/kindlestrip.py Exit Status: 0
+
+       mv artifacts/sicp.mobi artifacts/sicp-large.mobi
+       mv artifacts/sicp-stripped.mobi artifacts/sicp.mobi
 </pre>
 
 ### Interested in reformatting?

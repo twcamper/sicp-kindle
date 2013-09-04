@@ -33,6 +33,9 @@ ARTIFACTS  = "artifacts"
 NCX_TOC    = "#{ARTIFACTS}/toc.ncx"
 OPF        = "#{ARTIFACTS}/sicp.opf"
 BOOK       = "#{ARTIFACTS}/sicp.mobi"
+LARGE_BOOK = "#{ARTIFACTS}/sicp-large.mobi"
+STRIPPED   = "#{ARTIFACTS}/sicp-stripped.mobi"
+STRIPPER   = "kindlestrip/kindlestrip.py"
 LOG        = "#{ARTIFACTS}/kindlegen.log"
 
 # Clean list
@@ -41,9 +44,27 @@ CLEAN.include(FileList["#{ARTIFACTS}/**", ARTIFACTS])
 # Rake method to make the dir if necessary
 directory(ARTIFACTS)
 
-task :default => :build
+desc "when you just run '$ rake', this runs :strip"
+task :default => :strip
 
-task :build => OPF do
+desc "DEFAULT TASK: remove source from completed ebook to reduce size by 1/3"
+task :strip => BOOK do
+  puts cmd = "./#{STRIPPER} #{BOOK} #{STRIPPED}"
+  puts
+  puts `#{cmd}`
+
+  puts "#{STRIPPER} Exit Status: #{$?.exitstatus}"
+  puts
+
+  FileUtils.mv(BOOK, LARGE_BOOK, :verbose => true)
+  FileUtils.mv(STRIPPED, BOOK, :verbose => true)
+end
+
+desc "task alias to run #{BOOK} task"
+task :build => BOOK
+
+desc "create the ebook with kindlegen"
+file BOOK => OPF do
   # kindlegen executable must be on your path
   cmd = "kindlegen #{OPF} -c2 -verbose > #{LOG}"
   puts "running: '#{cmd}'"
@@ -59,8 +80,8 @@ task :build => OPF do
   else
     puts "Failed to build book, see #{LOG} for information"
   end
-
-  exit result.exitstatus
+  puts "kindlegen Exit Status: #{result.exitstatus}"
+  puts
 end
 
 desc "T.O.C NCX xml: depends on artifacts dir being present"
