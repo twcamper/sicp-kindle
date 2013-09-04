@@ -1,0 +1,3 @@
+[submodule "kindlestrip"]
+	path = kindlestrip
+	url = https://github.com/jefftriplett/kindlestrip.git
