@@ -77,7 +77,7 @@ Then probably this:
     kindlegen Exit Status: 1
 </pre>
 
-The warnings refer to unresolved links that seem to have no affect on the formatting or navigability of the book itself.  They won't go away until someone debugs the HTML, but there doesn't seem to be any reason to.
+The warnings refer to unresolved links that seem to have no affect on the formatting or navigability of the book itself.
 
 To deflate the output size by stripping out the input source that Amazon must have some reason for including, yet removes when they publish in their store anyway, the final <code>Rake</code> task <code>:strip</code> uses Paul Durrant's python script from this [GitHub repo](https://github.com/jefftriplett/kindlestrip).  So at the end, you'll see something like:
 
@@ -98,11 +98,14 @@ To deflate the output size by stripping out the input source that Amazon must ha
 
 ### Interested in reformatting?
 
-If you start with pristine HTML source from MIT (see links above), there is a <code>FixHTMLSource</code> module in the script that uses Nokogiri as an HTML parser to add mobi pagebreaks.
+If you start with pristine HTML source from MIT (see links above), there is a <code>:fix_html_source</code> task in the that uses Nokogiri as an HTML parser to add mobi pagebreaks.
 You could build on that tiny amount of code to manipulate the source however you see fit.  Nokogiri is a joy to use for such work, though installation of the gem has historically been tricky depending on the state of your local <code>libxsl</code> dependencies.
-Note that Nokogiri is required only at runtime in <code>FixHTMLSource</code> now, so most users of the script will never run into it.
+Note that Nokogiri is required only at runtime in <code>FixHTMLSource</code> now, so users just building the book from the included source will never need it.
 
+<pre>
+    $ rake fix_html_source
+</pre>
 
 ### TODO
 
-Read the damn book!
+* Read the damn book!
