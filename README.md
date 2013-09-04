@@ -69,8 +69,8 @@ e.g.,
 
 <pre>
     # the third arg to the python script is optional
-    $ ./kindlestrip.py ~/sicp-kindle/content/sicp.mobi ~/sicp-kindle/content/small.mobi ~/sicp-kindle/content/removed-source
-    $ mv ~/sicp-kindle/content/small.mobi ~/sicp-kindle/sicp.mobi
+    $ ./kindlestrip.py sicp.mobi small.mobi removed-source.log
+    $ mv small.mobi sicp.mobi
 </pre>
 
 ### Interested in reformatting?
