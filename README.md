@@ -63,7 +63,7 @@ The warnings refer to unresolved links that seem to have no affect on the format
 
 #### Stripping the Source
 
-To deflate the output size by stripping out the <code>opf</code> xml source that Amazon must have some reason for including, yet removes when they publish in their store anyway, use [Paul Durrant's](paul@durrant.co.uk) python script which can be found on GitHub [here](https://github.com/jefftriplett/kindlestrip).  Note that you only really need the file 'kindlestrip.py' from Jeff Triplett's repo.
+To deflate the output size by stripping out the <code>opf</code> xml source that Amazon must have some reason for including, yet removes when they publish in their store anyway, use Paul Durrant's python script which can be found on GitHub [here](https://github.com/jefftriplett/kindlestrip).  Note that you only really need the file 'kindlestrip.py' from Jeff Triplett's repo.
 
 e.g.,
 
