@@ -25,9 +25,13 @@ http://mitpress.mit.edu/sicp/full-text/book/book.html
 
 ### Notes on building the book
 
-Recent kindlegen versions (2.9 is current as of this writing) produce much larger <code>*.mobi</code> files than mobigen or older versions of kindlegen did.  Because of that I see no reason to push a more recent build to this repo.
+The old build of <code>sicp.mobi</code> in this repo seems to work fine.  But if you want or need to build it yourself, you need to:
 
-The old build of <code>sicp.mobi</code> in this repo seems to work fine.  But if you want or need to build it yourself . . .
+1. generate the input <code>opf</code> xml, so your build has a current date.
+2. run that input through 'kindlegen' to produce a large but functional book
+3. optionally strip out the source that kindlegen includes in the output using '[kindlestrip.py](https://github.com/jefftriplett/kindlestrip)'
+
+#### Building the Book
 
 * install 'kindlegen' somewhere in your path.
 * make sure you have Ruby 1.8.7 or later
@@ -57,9 +61,21 @@ Then probably this:
 
 The warnings refer to unresolved links that seem to have no affect on the formatting or navigability of the book itself.  They won't go away until someone debugs the HTML, but there doesn't seem to be any reason to.
 
+#### Stripping the Source
+
+To deflate the output size by stripping out the <code>opf</code> xml source that Amazon must have some reason for including, yet removes when they publish in their store anyway, use [Paul Durrant's](paul@durrant.co.uk) python script which can be found on GitHub [here](https://github.com/jefftriplett/kindlestrip).  Note that you only really need the file 'kindlestrip.py' from Jeff Triplett's repo.
+
+e.g.,
+
+<pre>
+    # the third arg to the python script is optional
+    $ ./kindlestrip.py ~/sicp-kindle/content/sicp.mobi ~/sicp-kindle/content/small.mobi ~/sicp-kindle/content/removed-source
+    $ mv ~/sicp-kindle/content/small.mobi ~/sicp-kindle/sicp.mobi
+</pre>
+
 ### Interested in reformatting?
 
-If you start with pristine HTML source from MIT (see links above), there is <code>FixHTMLSource</code> module in the script that uses Nokogiri as an HTML parser to add mobi pagebreaks.
+If you start with pristine HTML source from MIT (see links above), there is a <code>FixHTMLSource</code> module in the script that uses Nokogiri as an HTML parser to add mobi pagebreaks.
 You could build on that tiny amount of code to manipulate the source however you see fit.  Nokogiri is a joy to use for such work, though installation of the gem has historically been tricky depending on the state of your local <code>libxsl</code> dependencies.
 Note that Nokogiri is required only at runtime in <code>FixHTMLSource</code> now, so most users of the script will never run into it.
 
