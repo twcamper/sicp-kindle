@@ -27,11 +27,11 @@ require 'rubygems'
 require 'date'
 
 # Singleton to not re-init in rake tasks
-def BookBuilder(source_directory)
-  @bb ||= BookBuilder.new source_directory
+def XmlGenerator(source_directory)
+  @xg ||= XmlGenerator.new source_directory
 end
 
-class BookBuilder
+class XmlGenerator
   def initialize(source_directory)
     @src_dir = source_directory
   end

@@ -24,7 +24,7 @@
 # For more information, please refer to <http://unlicense.org/>
 require 'rubygems'
 require 'rake/clean'
-require './lib/book_builder'
+require './lib/xml_generator'
 require './lib/fix_html_source'
 
 PROJECT    = File.expand_path(File.dirname(__FILE__))
@@ -88,13 +88,13 @@ end
 desc "OPF xml: depends on NCX T.O.C."
 file OPF => NCX_TOC do
   puts "generating '#{OPF}'"
-  File.open(OPF, "w") {|f| f.puts BookBuilder(SRC).opf}
+  File.open(OPF, "w") {|f| f.puts XmlGenerator(SRC).opf}
 end
 
 desc "T.O.C NCX xml: depends on artifacts dir being present"
 file NCX_TOC => ARTIFACTS do
   puts "generating '#{NCX_TOC}'"
-  File.open(NCX_TOC, "w") {|f| f.puts BookBuilder(SRC).ncx_toc}
+  File.open(NCX_TOC, "w") {|f| f.puts XmlGenerator(SRC).ncx_toc}
 end
 
 desc "fix HTML if you got new source from MIT"

@@ -32,7 +32,7 @@ module FixHTMLSource
   # add mobi-specific pagebreaks
   def self.do(src_dir)
     require 'nokogiri'
-    BookBuilder.new(src_dir).chapters.reject {|f| f == "book-Z-H-4.html"}.each do |file|
+    XmlGenerator.new(src_dir).chapters.reject {|f| f == "book-Z-H-4.html"}.each do |file|
       doc = Nokogiri(File.open(file).read)
 
       n = doc.search(".navigation")
