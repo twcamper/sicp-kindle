@@ -83,9 +83,9 @@ Then probably this:
     mv artifacts/sicp.mobi artifacts/sicp-large.mobi
 </pre>
 
-The warnings refer to unresolved links that seem to have no affect on the formatting or navigability of the book itself.
+The warnings refer to unresolved links that have no real effect on the formatting or navigability of the book itself.  There are 2 kinds: html anchors referring back to the TOC page, and gif images.  The anchors are actually broken links that persist in the live MIT source to this day. In the Kindle book they just don't do anything, so it's not a real issue.  The gif's actually work like they should, so with respect to those Kindlegen is just crazy.
 
-To deflate the output size by stripping out the input source that Amazon must have some reason for including, yet removes when they publish in their store anyway, the final <code>Rake</code> task <code>:strip</code> uses Paul Durrant's python script from this [GitHub repo](https://github.com/jefftriplett/kindlestrip).  So at the end, you'll see something like:
+To deflate the output size by stripping out the input source that Amazon must have some reason for including, yet removes when they publish in their store anyway, the final <code>Rake</code> task uses Paul Durrant's python script from this [GitHub repo](https://github.com/jefftriplett/kindlestrip).  So at the end, you'll see something like:
 
 
 <pre>
@@ -93,15 +93,65 @@ To deflate the output size by stripping out the input source that Amazon must ha
     KindleStrip v1.35.0. Written 2010-2012 by Paul Durrant and Kevin Hendricks.
     Found SRCS section number 750, and count 2
        beginning at offset 1082728 and ending at offset 1202268
-       done
-       Header Bytes: 53524353000000100000002f00000001
-       kindlestrip/kindlestrip.py exit status: 0
+    done
+    Header Bytes: 53524353000000100000002f00000001
+    kindlestrip/kindlestrip.py exit status: 0
 
+</pre>
+
+### Kindlegen Compression Settings
+
+According to the usage output from just
+
+  $ kindlegen
+
+you can say <code>-c0, -c1, -c2</code> or nothing at all.  With respect to runtime and output size, "nothing" is about the same as <code>-c1</code>. <code>-c0</code> is just 2 or 3 seconds faster than those, but an <em>ENORMOUS</em> file is produced.  Size of a house, I'm serious.  <code>-c2</code> (my default) is <em>SLOW</em> but the smallest.
+
+You can alter the setting in the Rakefile in the <code>LARGE_BOOK</code> file task.
+
+Here are some results from my 2010 MBP running KindleGen 2.9.
+
+<pre>
+  # No compression setting 
+  $ time kindlegen artifacts/sicp.opf -verbose > artifacts/kindlegen.log
+    l0m9.258s
+    user0m15.597s
+    sys0m1.156s
+  $ ll artifacts/*.mobi
+    -rw-r--r--  1 twcamper  staff  4040242 Sep  4 18:51 artifacts/sicp-large.mobi
+    -rw-r--r--  1 twcamper  staff  2833465 Sep  4 18:51 artifacts/sicp.mobi
+
+  # '-c0' compression setting -- fast, fattest
+  $ time kindlegen artifacts/sicp.opf -c0 -verbose > artifacts/kindlegen.log
+    real0m7.864s
+    user0m12.949s
+    sys0m1.207s
+  $ ll artifacts/*.mobi
+    -rw-r--r--  1 twcamper  staff  6816182 Sep  4 18:52 artifacts/sicp-large.mobi
+    -rw-r--r--  1 twcamper  staff  5609417 Sep  4 18:52 artifacts/sicp.mobi
+
+  # '-c1' compression setting 
+  $ time kindlegen artifacts/sicp.opf -c1 -verbose > artifacts/kindlegen.log
+    real0m9.245s
+    user0m15.952s
+    sys0m1.160s
+  $ ll artifacts/*.mobi
+    -rw-r--r--  1 twcamper  staff  4040078 Sep  4 18:52 artifacts/sicp-large.mobi
+    -rw-r--r--  1 twcamper  staff  2833465 Sep  4 18:52 artifacts/sicp.mobi
+
+  # '-c2' compression setting -- slowest, smallest
+  $ time kindlegen artifacts/sicp.opf -c2 -verbose > artifacts/kindlegen.log
+    real2m13.958s
+    user3m58.323s
+    sys0m1.684s
+  $ ll artifacts/*.mobi
+    -rw-r--r--  1 twcamper  staff  3249518 Sep  4 18:56 artifacts/sicp-large.mobi
+    -rw-r--r--  1 twcamper  staff  2042629 Sep  4 18:56 artifacts/sicp.mobi
 </pre>
 
 ### Interested in reformatting?
 
-If you start with pristine HTML source from MIT (see links above), there is a <code>:fix_html_source</code> task in the that uses Nokogiri as an HTML parser to add mobi pagebreaks.
+If you start with pristine HTML source from MIT (see links above), there is a <code>:fix_html_source</code> task that uses Nokogiri as an HTML parser to add mobi pagebreaks.
 You could build on that tiny amount of code to manipulate the source however you see fit.  Nokogiri is a joy to use for such work, though installation of the gem has historically been tricky depending on the state of your local <code>libxsl</code> dependencies.
 Note that Nokogiri is required only at runtime in <code>FixHTMLSource</code> now, so users just building the book from the included source will never need it.
 
@@ -111,4 +161,5 @@ Note that Nokogiri is required only at runtime in <code>FixHTMLSource</code> now
 
 ### TODO
 
+* revisit the height issue on the <code>References</code> page.  Modern Kindlegen might handle the problem in a standard way now.
 * Read the damn book!

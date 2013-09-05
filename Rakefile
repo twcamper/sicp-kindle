@@ -65,7 +65,8 @@ end
 desc "usable ebook, but bloated with input source"
 file LARGE_BOOK => OPF do
   # kindlegen executable must be on your path
-  cmd = "kindlegen #{OPF} -c2 -verbose > #{LOG}"
+  # cmd = "kindlegen #{OPF} -verbose > #{LOG}"     # about the same as -c1
+  cmd = "kindlegen #{OPF} -c2 -verbose > #{LOG}"    # Smallest, but SLOW!!
   puts "running '#{cmd}'"
   puts "\twriting to directory '#{ARTIFACTS}'\n"
   `#{cmd}`
