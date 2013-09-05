@@ -17,30 +17,35 @@ http://mitpress.mit.edu/sicp/full-text/book/book.html
 
 4 - set text-indent: 0 for <code>p</code> tags, since kindle indents about 1em by default, which deformatted the code snips ( <code>&lt;p&gt;&lt;tt&gt;</code> is used instead of <code>pre</code> )
 
-5 - set height="2em" on div tags in 'References' section (kindle doesn't support the CSS for controlling this)
+5 - ~~set height="2em" on div tags in 'References' section (kindle doesn't support the CSS for controlling this)~~
 
 6 - added jump table to top of index
 
 7 - built opf and ncx with ruby.  toc.ncx allows 'nav points' for the 5-way kindle knob to get you from chapter to chapter
 
+8 - reverted item 5 above: several years later simple <code>p</code> tags with an 85% font look fine.
+
 ### Notes on building the book
 
 The old build of <code>sicp.mobi</code> in this repo seems to work fine.  But if you want or need to build it yourself, you need to:
 
-1. generate the input <code>opf</code> xml, so your build has a current date.
+1. generate the input <code>ncx</code> and <code>opf</code> xml.
 2. run that input through 'kindlegen' to produce a large but functional book
 3. optionally strip out the source that kindlegen includes in the output using '[kindlestrip.py](https://github.com/jefftriplett/kindlestrip)'
+
+A set of <code>Rake</code> tasks will do any or all of these tasks for you, in the correct order as needed.
 
 #### Building the Book
 
 * install 'kindlegen' somewhere in your path.
 * make sure you have Ruby 1.8.7 or later
 * make sure you have the <code>Rake</code> gem
-* ideally, have Python installed
+* ideally but optionally,  have Python installed
 
 <pre>
      $ cd ~/sicp-kindle
-     # to build the book (compact binary)
+
+     # to build the book (compact binary -- requires Python)
      $ rake build
      # or just
      $ rake
@@ -103,7 +108,7 @@ To deflate the output size by stripping out the input source that Amazon must ha
 
 According to the usage output from just
 
-  $ kindlegen
+      $ kindlegen
 
 you can say <code>-c0, -c1, -c2</code> or nothing at all.  With respect to runtime and output size, "nothing" is about the same as <code>-c1</code>. <code>-c0</code> is just 2 or 3 seconds faster than those, but an <em>ENORMOUS</em> file is produced.  Size of a house, I'm serious.  <code>-c2</code> (my default) is <em>SLOW</em> but the smallest.
 
@@ -161,5 +166,4 @@ Note that Nokogiri is required only at runtime in <code>FixHTMLSource</code> now
 
 ### TODO
 
-* revisit the height issue on the <code>References</code> page.  Modern Kindlegen might handle the problem in a standard way now.
 * Read the damn book!

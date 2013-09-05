@@ -53,7 +53,7 @@ desc "alias: create '#{LARGE_BOOK}' with kindlegen"
 task :build_large => LARGE_BOOK
 
 desc "FINAL OUTPUT: remove source from completed ebook to reduce size by 1/3"
-task BOOK => LARGE_BOOK do
+file BOOK => LARGE_BOOK do
   cmd = "#{STRIPPER} #{LARGE_BOOK} #{BOOK}"
   puts "running '#{cmd}'"
   puts `#{cmd}`
