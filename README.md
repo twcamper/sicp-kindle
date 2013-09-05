@@ -65,7 +65,7 @@ The old build of <code>sicp.mobi</code> in this repo seems to work fine.  But if
      $ rake artifacts/toc.ncx artifacts/sicp.opf
 </pre>
 
-When you run Rake (<code>:build</code> or <code>:strip</code> task), you'll see this for a few minutes:
+When you run Rake (<code>:build_large</code> or <code>:build</code> task), you'll see this for a few minutes:
 
 <pre>
     mkdir -p artifacts
