@@ -1,4 +1,8 @@
-#### Slight reformatting of the pages at
+#### A great looking PDF and EPUB can be found here:
+
+https://sicpebook.wordpress.com/ebook/
+
+#### This, however, is just a slight reformatting of the pages at
 
 http://mitpress.mit.edu/sicp/full-text/book/book.html
 
